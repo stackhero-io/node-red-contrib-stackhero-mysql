@@ -23,5 +23,6 @@
   "author": {
     "name": "Stackhero",
     "url": "https://www.stackhero.io/"
-  }
+  },
+  "license" : "AGPL-3.0"
 }
