@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "description": "A Node-RED node to connect to a MySQL or a MariaDB database, using TLS (SSL) and compatible with \"Caching SHA2 password\" authentication method (MySQL >= 8).",
   "dependencies": {
-    "mysql2": "2.1.0"
+    "mysql2": "2.2.5"
   },
   "repository": {
     "type": "git",
