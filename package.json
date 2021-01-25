@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-stackhero-mysql",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A Node-RED node to connect to a MySQL or a MariaDB database, using TLS (SSL) and compatible with \"Caching SHA2 password\" authentication method (MySQL >= 8).",
   "dependencies": {
     "mysql2": "2.2.5"

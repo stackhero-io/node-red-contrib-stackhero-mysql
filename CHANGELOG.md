@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.5 (2021-01-25)
+
+- 🐞 Fix an issue where msg.payload wasn't checked well (see #3)
+- 🐞 Fix an issue where connections weren't well handled (see #5)
+
+
 ## 1.0.4 (2021-01-25)
 
 - 🐞 Resolve a bug where "msg.payload should be an object" was throw depending of how payload was created
