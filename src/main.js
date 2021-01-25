@@ -35,6 +35,10 @@ module.exports = (RED) => {
     this.connect = async () => {
       this.emit('state', 'connecting');
 
+      if (this.pool) {
+        return;
+      }
+
       // Note: the connection is not done here
       this.pool = mysql.createPool({
         host: config.host,
