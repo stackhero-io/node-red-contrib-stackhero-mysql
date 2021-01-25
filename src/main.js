@@ -124,7 +124,8 @@ module.exports = (RED) => {
         return;
       }
 
-      if (msg.payload !== undefined && !(msg.payload instanceof Object)) {
+      const isAnObject = (value) => (value && typeof value === 'object' && (value.__proto__ == null || value.__proto__ === Object.prototype));
+      if (msg.payload !== undefined && !isAnObject(msg.payload)) {
         this.error('msg.payload should be an object containing the query arguments.');
         return;
       }
