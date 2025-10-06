@@ -25,16 +25,54 @@ If you are looking for powerful managed services, like Node-RED, MySQL or MariaD
 
 This node is really simple.
 
-Put your query in the `topic` variable and, if you have arguments, put them in an object in the `payload` variable.
+Put your query in the `topic` variable and, if you have arguments, put them in an array or an object in the `payload` variable.
 You will get the result in the `payload` output variable.
 
-Example:
+Examples of queries:
+
+
+#### Object-based insertion (SET with object)
 
 ```javascript
-msg.topic = 'SELECT * FROM `users` WHERE `name` = :name AND `age` > :age;';
-msg.payload = { name: 'Adrien', age: 30 };
+msg.topic = 'INSERT INTO `users` SET ?';
+msg.payload = [{ name: 'Adrien', age: 42 }];
+
 return msg;
 ```
+
+
+#### Named parameters
+
+```javascript
+msg.topic = 'INSERT INTO `users` (`name`, `age`) VALUES (:name, :age)';
+msg.payload = { name: 'Adrien', age: 42 };
+
+return msg;
+```
+
+
+#### Positional parameters
+
+```javascript
+msg.topic = 'INSERT INTO `users` (`name`, `age`) VALUES (?, ?)';
+msg.payload = [ 'Adrien', 42 ];
+
+return msg;
+```
+
+
+#### Bulk (multi-row) insertion
+
+```javascript
+msg.topic = 'INSERT INTO `users` (`name`, `age`) VALUES ?';
+msg.payload = [[
+  [ 'Adrien', 42 ],
+  [ 'Romain', 12 ]
+]];
+
+return msg;
+```
+
 
 > Avoid SQL injections!!
 >
@@ -43,7 +81,6 @@ return msg;
 
 
 ## Troubleshooting
-
 
 ### Error "Connections using insecure transport are prohibited while --require_secure_transport=ON"
 
