@@ -52,19 +52,34 @@ module.exports = (RED) => {
         connectTimeout: 1000,
         ssl: config.tls ? {} : false,
 
-        // See https://www.npmjs.com/package/mysql#custom-format
-        queryFormat: (query, values) => {
-          if (!values) return query;
-          return query.replace(/:(\w+)/g, (txt, key) => {
-            return Object.prototype.hasOwnProperty.call(values, key)
-              ? this.pool.escape(values[key])
-              : txt;
-          });
-        }
+        // debug: true,
+
+        // Add support for queries like "WHERE `name` = :name" with payload being "{ name: 'Adrien' }".
+        // See https://sidorares.github.io/node-mysql2/docs/documentation/extras#named-placeholders
+        namedPlaceholders: true
       });
 
       // Do a ping that will trigger the connection and check that it is working
       await this.ping();
+
+
+      // const tests = [
+      //   [ 'INSERT INTO `users` SET ?', [{ name: 'Adrien', age: 12 }] ],
+      //   [ 'INSERT INTO `users` (`name`, `age`) VALUES (:name, :age)', { name: 'Adrien', age: 12 } ],
+      //   [ 'INSERT INTO `users` (`name`, `age`) VALUES (?, ?)', [ 'Adrien', 12 ] ],
+      //   [ 'INSERT INTO `users` (`name`, `age`) VALUES ?', [[ [ 'Adrien', 12 ], [ 'Romain', 12 ] ]] ]
+      // ];
+
+      // for (const test of tests) {
+      //   const [ query, payload ] = test;
+      //   console.log(query);
+      //   console.log(payload);
+      //   const result = await this.query(query, payload);
+      //   console.log(result);
+      //   console.log();
+      //   console.log('-'.repeat(80));
+      //   console.log();
+      // }
     };
 
     this.on('close', async done => {
@@ -129,8 +144,9 @@ module.exports = (RED) => {
       }
 
       const isAnObject = value => value === Object(value) && !Array.isArray(value);
-      if (msg.payload !== undefined && !isAnObject(msg.payload)) {
-        this.error('msg.payload should be an object containing the query arguments.');
+      const isAnArray = value => Array.isArray(value);
+      if (msg.payload !== undefined && !isAnObject(msg.payload) && !isAnArray(msg.payload)) {
+        this.error('msg.payload should be an object or an array containing the query arguments.');
         return;
       }
 
@@ -140,7 +156,7 @@ module.exports = (RED) => {
             msg.topic,
             msg.payload
           );
-          this.setState('queryDone');
+        this.setState('queryDone');
         msg.payload = result;
         this.send(msg);
       }
