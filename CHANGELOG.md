@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.7 (2026-11-17)
+
+- 🌟 Update Mysql2 package to 3.24.6 (security fixes).
+
+
 ## 1.0.6 (2025-10-06)
 
 - 🌟 Update Mysql2 package to 3.15.1.
